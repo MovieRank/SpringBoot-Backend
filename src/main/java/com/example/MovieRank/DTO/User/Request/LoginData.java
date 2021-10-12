@@ -1,4 +1,4 @@
-package com.example.MovieRank.DTO.User;
+package com.example.MovieRank.DTO.User.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,13 +11,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RegistrationData {
+public class LoginData {
 
     private String username;
-
-    private String email;
-
-    private Set<String> roles;
 
     private String password;
 }

@@ -12,7 +12,7 @@ public class UserAnalysis {
     public static void existsUserByUsername(UserRepository userRepository, String username) {
 
         if (userRepository.existsUserByUsername(username)) {
-            logger.error(("User with the given name already exists in Database"));
+            logger.error(("User with the given name already exists in Database: " + "\"" + username + "\""));
             throw new UserAlreadyExistsException("Użytkownik o podanej nazwie już istnieje!");
         }
     }
@@ -20,7 +20,7 @@ public class UserAnalysis {
     public static void existsUserByEmail(UserRepository userRepository, String email) {
 
         if (userRepository.existsUserByEmail(email)) {
-            logger.error("User with the given e-mail already exists in Database");
+            logger.error("User with the given e-mail already exists in Database: " + "\"" + email + "\"");
             throw new UserAlreadyExistsException("Użytkownik o podanym e-mailu już istnieje!");
         }
     }
