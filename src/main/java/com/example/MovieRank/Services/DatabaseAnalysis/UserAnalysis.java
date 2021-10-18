@@ -1,18 +1,33 @@
 package com.example.MovieRank.Services.DatabaseAnalysis;
 
+import com.example.MovieRank.Entities.User;
 import com.example.MovieRank.Exceptions.UserAlreadyExistsException;
+import com.example.MovieRank.Exceptions.UserNotFoundException;
 import com.example.MovieRank.Repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Optional;
 
 public class UserAnalysis {
 
     static Logger logger = LoggerFactory.getLogger(UserAnalysis.class);
 
+    public static User findUserByUserId(UserRepository userRepository, Long userId) {
+
+        Optional<User> user = userRepository.findUserByUserId(userId);
+        if (user.isEmpty()) {
+            logger.error("User with the given ID was not found: " + "\"" + userId + "\"");
+            throw new UserNotFoundException("Użytkownik o podanym ID nie został odnaleziony!");
+        }
+
+        return user.get();
+    }
+
     public static void existsUserByUsername(UserRepository userRepository, String username) {
 
         if (userRepository.existsUserByUsername(username)) {
-            logger.error(("User with the given name already exists in Database: " + "\"" + username + "\""));
+            logger.error("User with the given name already exists in Database: " + "\"" + username + "\"");
             throw new UserAlreadyExistsException("Użytkownik o podanej nazwie już istnieje!");
         }
     }

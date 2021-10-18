@@ -19,6 +19,7 @@ public class MovieRankApplication {
 		SpringApplication.run(MovieRankApplication.class, args);
 	}
 
+	/*
 	@Bean
 	InitializingBean addRolesToDatabase() {
 		return () -> {
@@ -26,4 +27,5 @@ public class MovieRankApplication {
 			roleRepository.save(Role.builder().name(RoleEnum.ROLE_ADMIN).build());
 		};
 	}
+	*/
 }

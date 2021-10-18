@@ -1,10 +1,13 @@
 package com.example.MovieRank.Services.User;
 
 import com.example.MovieRank.DTO.MessageResponse;
+import com.example.MovieRank.DTO.User.Request.DeleteData;
 import com.example.MovieRank.DTO.User.Request.LoginData;
 import com.example.MovieRank.DTO.User.Request.RegistrationData;
+import com.example.MovieRank.DTO.User.Request.UpdateData;
 import com.example.MovieRank.DTO.User.Response.UserTokenData;
 import com.example.MovieRank.Entities.User;
+import com.example.MovieRank.Exceptions.IncorrectDataInput;
 import com.example.MovieRank.Repositories.RoleRepository;
 import com.example.MovieRank.Repositories.UserRepository;
 import com.example.MovieRank.Security.TokenClass.JwtUtils;
@@ -75,5 +78,53 @@ public class UserService {
 
         logger.info("User successfully registered: \"" + username + "\"");
         return new MessageResponse("Rejestracja przebiegła pomyślnie.");
+    }
+
+    public MessageResponse userUpdate(UpdateData updateData) {
+
+        if (updateData.getUsername() == null || updateData.getFirstname() == null || updateData.getLastname() == null || updateData.getEmail() == null) {
+            logger.error("New user data is empty");
+            throw new IncorrectDataInput("Nowe dane są błędne!");
+        }
+
+        User user = UserAnalysis.findUserByUserId(userRepository, updateData.getUserId());
+
+        String username = updateData.getUsername();
+        if (!user.getUsername().equals(username) && !username.equals("")) {
+            UserAnalysis.existsUserByUsername(userRepository, username);
+            PatternCheckClass.usernamePattern(username);
+            user.setUsername(username);
+        }
+
+        String firstname = updateData.getFirstname();
+        if (!user.getFirstname().equals(firstname) && !firstname.equals("")) {
+            user.setFirstname(firstname);
+        }
+
+        String lastname = updateData.getLastname();
+        if (!user.getLastname().equals(lastname) && !lastname.equals("")) {
+            user.setLastname(lastname);
+        }
+
+        String email = updateData.getEmail();
+        if (!user.getEmail().equals(email) && !email.equals("")) {
+            UserAnalysis.existsUserByEmail(userRepository, email);
+            PatternCheckClass.emailPattern(email);
+            user.setEmail(email);
+        }
+
+        userRepository.save(user);
+
+        logger.error("User data successfully updated: \"" + username + "\"");
+        return new MessageResponse("Dane zostały zaktualizowane.");
+    }
+
+    public MessageResponse userDelete(DeleteData deleteData) {
+
+        AuthenticationClass.authenticateUser(authenticationManager, deleteData);
+        userRepository.delete(UserAnalysis.findUserByUserId(userRepository, deleteData.getUserId()));
+
+        logger.info("User successfully deleted: " +  "\"" + deleteData.getUsername() + "\"");
+        return new MessageResponse("Konto zostało usunięte.");
     }
 }
