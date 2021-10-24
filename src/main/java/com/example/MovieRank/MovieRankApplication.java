@@ -2,7 +2,7 @@ package com.example.MovieRank;
 
 import com.example.MovieRank.Entities.Enum.RoleEnum;
 import com.example.MovieRank.Entities.Role;
-import com.example.MovieRank.Repositories.RoleRepository;
+import com.example.MovieRank.Repositories.*;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
