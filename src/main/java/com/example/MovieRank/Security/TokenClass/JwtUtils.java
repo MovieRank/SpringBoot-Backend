@@ -1,7 +1,6 @@
 package com.example.MovieRank.Security.TokenClass;
 
 import com.example.MovieRank.DTO.User.Response.UserData;
-import com.example.MovieRank.Entities.User;
 import com.example.MovieRank.Security.UserDetails.UserDetailsClass;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;

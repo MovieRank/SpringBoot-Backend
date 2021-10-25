@@ -5,11 +5,13 @@ import com.example.MovieRank.DTO.User.Request.DeleteData;
 import com.example.MovieRank.DTO.User.Request.LoginData;
 import com.example.MovieRank.DTO.User.Request.RegistrationData;
 import com.example.MovieRank.DTO.User.Request.UpdateData;
+import com.example.MovieRank.DTO.User.Response.UserImageData;
 import com.example.MovieRank.DTO.User.Response.UserTokenData;
 import com.example.MovieRank.Services.User.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -48,5 +50,21 @@ public class UserController {
 
         MessageResponse messageResponse = userService.userDelete(deleteData);
         return ResponseEntity.ok(messageResponse);
+    }
+
+    @PutMapping("/upload/{id}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<MessageResponse> userUpload(@PathVariable(name = "id") Long userId, @RequestParam("image") MultipartFile image) {
+
+        MessageResponse messageResponse = userService.userUpload(userId, image);
+        return ResponseEntity.ok(messageResponse);
+    }
+
+    @GetMapping("get/image/{id}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<UserImageData> userGetImage(@PathVariable(name = "id") Long userId) {
+
+        UserImageData userImageData = userService.userGetImage(userId);
+        return ResponseEntity.ok(userImageData);
     }
 }
