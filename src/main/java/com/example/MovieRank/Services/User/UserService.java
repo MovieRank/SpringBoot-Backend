@@ -5,6 +5,7 @@ import com.example.MovieRank.DTO.User.Request.DeleteData;
 import com.example.MovieRank.DTO.User.Request.LoginData;
 import com.example.MovieRank.DTO.User.Request.RegistrationData;
 import com.example.MovieRank.DTO.User.Request.UpdateData;
+import com.example.MovieRank.DTO.User.Response.UserImageData;
 import com.example.MovieRank.DTO.User.Response.UserTokenData;
 import com.example.MovieRank.Entities.User;
 import com.example.MovieRank.Exceptions.IncorrectDataInput;
@@ -23,6 +24,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UserService {
@@ -126,5 +128,21 @@ public class UserService {
 
         logger.info("User successfully deleted: " +  "\"" + deleteData.getUsername() + "\"");
         return new MessageResponse("Konto zostało usunięte.");
+    }
+
+    public MessageResponse userUpload(Long userId, MultipartFile image) {
+
+        User user = UserAnalysis.findUserByUserId(userRepository, userId);
+        user.setProfileImage(ConvertToArrayBytesClass.convertNewIcon(image));
+
+        userRepository.save(user);
+        logger.info("New profile picture added correctly: " + user.getUsername());
+        return new MessageResponse("Poprawnie dodano nowe zdjęcie profilowe.");
+    }
+
+    public UserImageData userGetImage(Long userId) {
+
+        User user = UserAnalysis.findUserByUserId(userRepository, userId);
+        return UserImageData.builder().profileImage(user.getProfileImage()).build();
     }
 }

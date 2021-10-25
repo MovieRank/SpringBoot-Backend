@@ -11,7 +11,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MovieListData {
+public class MovieListItem {
 
     private Long movieId;
 

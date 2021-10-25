@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 @Data
@@ -49,5 +49,5 @@ public class MovieData {
 
     private Set<String> productionCountries;
 
-    private HashMap<Long, String> productionCompanies;
+    private Map<Long, String> productionCompanies;
 }

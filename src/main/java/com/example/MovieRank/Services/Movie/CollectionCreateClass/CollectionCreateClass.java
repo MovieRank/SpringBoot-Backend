@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class CollectionCreateClass {
@@ -37,9 +38,9 @@ public class CollectionCreateClass {
         return productionCountries;
     }
 
-    public static HashMap<Long, String> createProductionCompaniesCollection(JSONArray jsonArray) {
+    public static Map<Long, String> createProductionCompaniesCollection(JSONArray jsonArray) {
 
-        HashMap<Long, String> productionCompanies = new HashMap<>();
+        Map<Long, String> productionCompanies = new HashMap<>();
         for (int i = 0; i < jsonArray.length(); i++) {
 
             JSONObject jsonObject = jsonArray.getJSONObject(i);
