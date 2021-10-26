@@ -1,4 +1,4 @@
-package com.example.MovieRank.Services.DatabaseAnalysis;
+package com.example.MovieRank.Services._DatabaseAnalysis;
 
 import com.example.MovieRank.Entities.User;
 import com.example.MovieRank.Exceptions.UserAlreadyExistsException;

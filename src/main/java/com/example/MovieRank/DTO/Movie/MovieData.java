@@ -29,9 +29,9 @@ public class MovieData {
 
     private Date releaseDate;
 
-    private byte[] backdropPath;
+    private byte[] backdropImage;
 
-    private byte[] posterPath;
+    private byte[] posterImage;
 
     private String homePage;
 

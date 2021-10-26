@@ -1,4 +1,4 @@
-package com.example.MovieRank.Services.DatabaseAnalysis;
+package com.example.MovieRank.Services._DatabaseAnalysis;
 
 import com.example.MovieRank.Entities.Enum.RoleEnum;
 import com.example.MovieRank.Entities.Role;

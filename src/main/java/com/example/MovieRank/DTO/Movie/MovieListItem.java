@@ -19,7 +19,7 @@ public class MovieListItem {
 
     private Date releaseDate;
 
-    private byte[] posterPath;
+    private byte[] posterImage;
 
     private Double voteAverage;
 

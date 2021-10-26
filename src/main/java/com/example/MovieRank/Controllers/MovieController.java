@@ -1,7 +1,9 @@
 package com.example.MovieRank.Controllers;
 
-import com.example.MovieRank.DTO.Movie.MovieData;
-import com.example.MovieRank.DTO.Movie.MovieListItem;
+import com.example.MovieRank.DTO.Credits.CastListItem;
+import com.example.MovieRank.DTO.Credits.CrewListItem;
+import com.example.MovieRank.DTO.Credits.PersonData;
+import com.example.MovieRank.DTO.Movie.*;
 import com.example.MovieRank.Services.Movie.MovieService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

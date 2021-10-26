@@ -4,7 +4,7 @@ import com.example.MovieRank.Entities.Enum.RoleEnum;
 import com.example.MovieRank.Entities.Role;
 import com.example.MovieRank.Exceptions.IncorrectDataInput;
 import com.example.MovieRank.Repositories.RoleRepository;
-import com.example.MovieRank.Services.DatabaseAnalysis.RoleAnalysis;
+import com.example.MovieRank.Services._DatabaseAnalysis.RoleAnalysis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

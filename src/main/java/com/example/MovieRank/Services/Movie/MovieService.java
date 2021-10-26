@@ -2,15 +2,11 @@ package com.example.MovieRank.Services.Movie;
 
 import com.example.MovieRank.DTO.Movie.MovieData;
 import com.example.MovieRank.DTO.Movie.MovieListItem;
-import com.example.MovieRank.Repositories.*;
 import com.example.MovieRank.Services.Movie.CollectionCreateClass.CollectionCreateClass;
 import com.example.MovieRank.Services.Movie.HttpRequestClass.HttpRequestClass;
 import com.example.MovieRank.Services.Movie.ImageDownloadClass.ImageDownloadClass;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -19,9 +15,6 @@ import java.util.List;
 
 @Service
 public class MovieService {
-
-    @Autowired
-    UserRepository userRepository;
 
     public static final String getMovieFirstPartURL = "https://api.themoviedb.org/3/movie/";
     public static final String getMovieSecondPartURL = "?api_key=6728e1ab041b59d1f357590bff4384f5&language=pl-PL";
@@ -45,8 +38,8 @@ public class MovieService {
                 .overview(jsonObject.getString("overview"))
                 .runtime(jsonObject.getLong("runtime"))
                 .releaseDate(Date.valueOf(jsonObject.getString("release_date")))
-                .backdropPath(backdropPath)
-                .posterPath(posterPath)
+                .backdropImage(backdropPath)
+                .posterImage(posterPath)
                 .homePage(jsonObject.getString("homepage"))
                 .budget(jsonObject.getLong("budget"))
                 .revenue(jsonObject.getLong("revenue"))
@@ -73,7 +66,7 @@ public class MovieService {
                     .movieId(movie.getLong("id"))
                     .title(movie.getString("title"))
                     .releaseDate(Date.valueOf(movie.getString("release_date")))
-                    .posterPath(posterPath)
+                    .posterImage(posterPath)
                     .voteAverage(0.0)
                     .voteCount(0L)
                     .build());
@@ -96,7 +89,7 @@ public class MovieService {
                     .movieId(movie.getLong("id"))
                     .title(movie.getString("title"))
                     .releaseDate(Date.valueOf(movie.getString("release_date")))
-                    .posterPath(posterPath)
+                    .posterImage(posterPath)
                     .voteAverage(0.0)
                     .voteCount(0L)
                     .build());
@@ -119,7 +112,7 @@ public class MovieService {
                     .movieId(movie.getLong("id"))
                     .title(movie.getString("title"))
                     .releaseDate(Date.valueOf(movie.getString("release_date")))
-                    .posterPath(posterPath)
+                    .posterImage(posterPath)
                     .voteAverage(0.0)
                     .voteCount(0L)
                     .build());
@@ -141,7 +134,7 @@ public class MovieService {
                     .movieId(movie.getLong("id"))
                     .title(movie.getString("title"))
                     .releaseDate(Date.valueOf(movie.getString("release_date")))
-                    .posterPath(posterPath)
+                    .posterImage(posterPath)
                     .voteAverage(0.0)
                     .voteCount(0L)
                     .build());

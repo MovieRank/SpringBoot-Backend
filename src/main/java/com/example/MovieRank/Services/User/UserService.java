@@ -12,7 +12,7 @@ import com.example.MovieRank.Exceptions.IncorrectDataInput;
 import com.example.MovieRank.Repositories.RoleRepository;
 import com.example.MovieRank.Repositories.UserRepository;
 import com.example.MovieRank.Security.TokenClass.JwtUtils;
-import com.example.MovieRank.Services.DatabaseAnalysis.UserAnalysis;
+import com.example.MovieRank.Services._DatabaseAnalysis.UserAnalysis;
 import com.example.MovieRank.Services.User.AuthenticationClass.AuthenticationClass;
 import com.example.MovieRank.Services.User.ConvertToArrayBytesClass.ConvertToArrayBytesClass;
 import com.example.MovieRank.Services.User.PatternCheckClass.PatternCheckClass;
