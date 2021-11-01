@@ -1,22 +1,25 @@
 package com.example.MovieRank.Services.User;
 
 import com.example.MovieRank.DTO.MessageResponse;
-import com.example.MovieRank.DTO.User.Request.DeleteData;
-import com.example.MovieRank.DTO.User.Request.LoginData;
-import com.example.MovieRank.DTO.User.Request.RegistrationData;
-import com.example.MovieRank.DTO.User.Request.UpdateData;
+import com.example.MovieRank.DTO.Movie.MovieListItem;
+import com.example.MovieRank.DTO.User.Request.*;
 import com.example.MovieRank.DTO.User.Response.UserImageData;
 import com.example.MovieRank.DTO.User.Response.UserTokenData;
 import com.example.MovieRank.Entities.User;
 import com.example.MovieRank.Exceptions.IncorrectDataInput;
+import com.example.MovieRank.Exceptions.MovieAlreadyAddedToListException;
+import com.example.MovieRank.Exceptions.MovieNotBeenWatchedException;
 import com.example.MovieRank.Repositories.RoleRepository;
 import com.example.MovieRank.Repositories.UserRepository;
 import com.example.MovieRank.Security.TokenClass.JwtUtils;
+import com.example.MovieRank.Services.Movie.HttpRequestClass.HttpRequestClass;
+import com.example.MovieRank.Services.Movie.ObjectCreateClass.ObjectCreateClass;
 import com.example.MovieRank.Services._DatabaseAnalysis.UserAnalysis;
 import com.example.MovieRank.Services.User.AuthenticationClass.AuthenticationClass;
 import com.example.MovieRank.Services.User.ConvertToArrayBytesClass.ConvertToArrayBytesClass;
 import com.example.MovieRank.Services.User.PatternCheckClass.PatternCheckClass;
 import com.example.MovieRank.Services.User.RolesSetCreateClass.RolesSetCreateClass;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +29,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class UserService {
+
+    public static final String getMovieFirstPartURL = "https://api.themoviedb.org/3/movie/";
+    public static final String getMovieSecondPartURL = "?api_key=6728e1ab041b59d1f357590bff4384f5&language=pl-PL";
 
     @Autowired
     UserRepository userRepository;
@@ -144,5 +154,121 @@ public class UserService {
 
         User user = UserAnalysis.findUserByUserId(userRepository, userId);
         return UserImageData.builder().profileImage(user.getProfileImage()).build();
+    }
+
+    public MessageResponse userAddMovieToWatch(AddMovieToWatchData addMovieToWatchData) {
+
+        User user = UserAnalysis.findUserByUserId(userRepository, addMovieToWatchData.getUserId());
+
+        if (user.getMoviesToWatch().contains(addMovieToWatchData.getMovieId())) {
+            logger.error("Movie has already been added to " + addMovieToWatchData.getUserId() + " watch list!");
+            throw new MovieAlreadyAddedToListException("Film został już dodany do listy DO OBEJRZENIA!");
+        }
+
+        if (user.getMoviesWatched().containsKey(addMovieToWatchData.getMovieId())) {
+            logger.error("Movie has already been added to " + addMovieToWatchData.getUserId() + " watched list!");
+            throw new MovieAlreadyAddedToListException("Film został już obejrzany!");
+        }
+
+        user.getMoviesToWatch().add(addMovieToWatchData.getMovieId());
+        userRepository.save(user);
+
+        logger.info("Movie: " + "\"" + addMovieToWatchData.getMovieId() + "\"" + " added to " + "\"" + user.getUsername() + "\"" + " list of movies to watch");
+        return new MessageResponse("Film został dodany do listy \"DO OBEJRZENIA\".");
+    }
+
+    public MessageResponse userAddMovieToWatched(AddMovieToWatchedData addMovieToWatchedData) {
+
+        User user = UserAnalysis.findUserByUserId(userRepository, addMovieToWatchedData.getUserId());
+
+        if (user.getMoviesWatched().containsKey(addMovieToWatchedData.getMovieId())) {
+            logger.error("Movie has already been added to " + addMovieToWatchedData.getUserId() + " watched list!");
+            throw new MovieAlreadyAddedToListException("Film został już obejrzany!");
+        }
+
+        user.getMoviesToWatch().remove(addMovieToWatchedData.getMovieId());
+        user.getMoviesWatched().put(addMovieToWatchedData.getMovieId(), addMovieToWatchedData.getMovieRating());
+        userRepository.save(user);
+
+        logger.info("Movie: " + "\"" + addMovieToWatchedData.getMovieId() + "\"" + " added to " + "\"" + user.getUsername() + "\"" + " list of movies watched");
+        return new MessageResponse("Film został dodany do listy \"OBEJRZANE\".");
+    }
+
+    public MessageResponse userAddMovieToFavorite(AddMovieToFavoriteData addMovieToFavoriteData) {
+
+        User user = UserAnalysis.findUserByUserId(userRepository, addMovieToFavoriteData.getUserId());
+
+        if (user.getMoviesToWatch().contains(addMovieToFavoriteData.getMovieId())) {
+            logger.error("You need to watch Movie and add to watched!");
+            throw new MovieNotBeenWatchedException("Film nie został obejrzny, nie można go dodac do ulubionych!");
+        }
+
+        if (!user.getMoviesWatched().containsKey(addMovieToFavoriteData.getMovieId())) {
+            logger.error("Movie has not been watched by " + addMovieToFavoriteData.getUserId());
+            throw new MovieNotBeenWatchedException("Film nie został obejrzany, nie można go dodać do ulubionych!");
+        }
+
+        if (user.getFavoriteMovies().containsKey(addMovieToFavoriteData.getMovieId())) {
+            logger.error("Movie has already been added to " + addMovieToFavoriteData.getUserId() + " favorite list!");
+            throw new MovieAlreadyAddedToListException("Film został już dodany do ulubionych!");
+        }
+
+        user.getFavoriteMovies().put(addMovieToFavoriteData.getMovieId(), addMovieToFavoriteData.getMovieRating());
+        userRepository.save(user);
+
+        logger.info("Movie: " + "\"" + addMovieToFavoriteData.getMovieId() + "\"" + " added to " + "\"" + user.getUsername() + "\"" + " list of movies watched");
+        return new MessageResponse("Film został dodany do listy \"ULUBIONE\".");
+    }
+
+    public List<MovieListItem> userGetToWatchMovies(Long userId) {
+
+        User user = UserAnalysis.findUserByUserId(userRepository, userId);
+        List<MovieListItem> movieListItem = new ArrayList<>();
+
+        for (Long movieId : user.getMoviesToWatch()) {
+            JSONObject jsonObject = new JSONObject(HttpRequestClass.sendRequest(getMovieFirstPartURL + movieId + getMovieSecondPartURL).body());
+            movieListItem.add(ObjectCreateClass.createMovieListItem(jsonObject));
+        }
+
+        return movieListItem;
+    }
+
+    public List<MovieListItem> userGetWatchedMovies(Long userId) {
+
+        User user = UserAnalysis.findUserByUserId(userRepository, userId);
+        List<MovieListItem> movieListItem = new ArrayList<>();
+
+        user.getMoviesWatched().forEach((movieId, movieRating) -> {
+            JSONObject jsonObject = new JSONObject(HttpRequestClass.sendRequest(getMovieFirstPartURL + movieId + getMovieSecondPartURL).body());
+            movieListItem.add(ObjectCreateClass.createMovieListItem(jsonObject));
+        });
+
+        return movieListItem;
+    }
+
+    public List<MovieListItem> userGetFavoriteMovies(Long userId) {
+
+        User user = UserAnalysis.findUserByUserId(userRepository, userId);
+        List<MovieListItem> movieListItem = new ArrayList<>();
+
+        user.getFavoriteMovies().forEach((movieId, movieRating) -> {
+            JSONObject jsonObject = new JSONObject(HttpRequestClass.sendRequest(getMovieFirstPartURL + movieId + getMovieSecondPartURL).body());
+            movieListItem.add(ObjectCreateClass.createMovieListItem(jsonObject));
+        });
+
+        return movieListItem;
+    }
+
+    public List<Boolean> userGetMoviesInfo(CheckUserMoviesInfoData checkUserMoviesInfoData) {
+
+        User user = UserAnalysis.findUserByUserId(userRepository, checkUserMoviesInfoData.getUserId());
+        Long movieId = checkUserMoviesInfoData.getMovieId();
+        List<Boolean> moviesInfo = new ArrayList<>();
+
+        if ((user.getMoviesToWatch().contains(movieId))) { moviesInfo.add(true); } else { moviesInfo.add(false); }
+        if ((user.getMoviesWatched().containsKey(movieId))) { moviesInfo.add(true); } else { moviesInfo.add(false); }
+        if ((user.getFavoriteMovies().containsKey(movieId))) { moviesInfo.add(true); } else { moviesInfo.add(false); }
+
+        return moviesInfo;
     }
 }

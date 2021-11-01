@@ -3,7 +3,9 @@ package com.example.MovieRank.Entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -30,6 +32,15 @@ public class User {
         private String password;
 
         private byte[] profileImage;
+
+        @ElementCollection
+        private Set<Long> moviesToWatch = new HashSet<>();
+
+        @ElementCollection
+        private Map<Long, Double> moviesWatched = new HashMap<>();
+
+        @ElementCollection
+        private Map<Long, Double> favoriteMovies = new HashMap<>();
 
         @ManyToMany(fetch = FetchType.LAZY)
         @JoinTable( name = "user_roles",

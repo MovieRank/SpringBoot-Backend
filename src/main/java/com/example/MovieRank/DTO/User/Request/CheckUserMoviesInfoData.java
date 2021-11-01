@@ -1,0 +1,17 @@
+package com.example.MovieRank.DTO.User.Request;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class CheckUserMoviesInfoData {
+
+    private Long userId;
+
+    private Long movieId;
+}

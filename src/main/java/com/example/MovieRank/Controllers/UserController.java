@@ -1,10 +1,8 @@
 package com.example.MovieRank.Controllers;
 
 import com.example.MovieRank.DTO.MessageResponse;
-import com.example.MovieRank.DTO.User.Request.DeleteData;
-import com.example.MovieRank.DTO.User.Request.LoginData;
-import com.example.MovieRank.DTO.User.Request.RegistrationData;
-import com.example.MovieRank.DTO.User.Request.UpdateData;
+import com.example.MovieRank.DTO.Movie.MovieListItem;
+import com.example.MovieRank.DTO.User.Request.*;
 import com.example.MovieRank.DTO.User.Response.UserImageData;
 import com.example.MovieRank.DTO.User.Response.UserTokenData;
 import com.example.MovieRank.Services.User.UserService;
@@ -12,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -60,11 +60,67 @@ public class UserController {
         return ResponseEntity.ok(messageResponse);
     }
 
-    @GetMapping("get/image/{id}")
+    @GetMapping("/get/image/{id}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserImageData> userGetImage(@PathVariable(name = "id") Long userId) {
 
         UserImageData userImageData = userService.userGetImage(userId);
         return ResponseEntity.ok(userImageData);
+    }
+
+    @PutMapping("/add/toWatch")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<MessageResponse> userAddMovieToWatch(@RequestBody AddMovieToWatchData addMovieToWatchData) {
+
+        MessageResponse messageResponse = userService.userAddMovieToWatch(addMovieToWatchData);
+        return ResponseEntity.ok(messageResponse);
+    }
+
+    @PutMapping("/add/watched")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<MessageResponse> userAddMovieToWatched(@RequestBody AddMovieToWatchedData addMovieToWatchedData) {
+
+        MessageResponse messageResponse = userService.userAddMovieToWatched(addMovieToWatchedData);
+        return ResponseEntity.ok(messageResponse);
+    }
+
+    @PutMapping("/add/favorite")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<MessageResponse> userAddMovieToFavorite(@RequestBody AddMovieToFavoriteData addMovieToFavoriteData) {
+
+        MessageResponse messageResponse = userService.userAddMovieToFavorite(addMovieToFavoriteData);
+        return ResponseEntity.ok(messageResponse);
+    }
+
+    @GetMapping("/get/toWatch/{id}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<MovieListItem>> userGetToWatchMovies(@PathVariable(name = "id") Long userId) {
+
+        List<MovieListItem> movieListItem = userService.userGetToWatchMovies(userId);
+        return ResponseEntity.ok(movieListItem);
+    }
+
+    @GetMapping("/get/watched/{id}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<MovieListItem>> userGetWatchedMovies(@PathVariable(name = "id") Long userId) {
+
+        List<MovieListItem> movieListItem = userService.userGetWatchedMovies(userId);
+        return ResponseEntity.ok(movieListItem);
+    }
+
+    @GetMapping("/get/favorite/{id}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<MovieListItem>> userGetFavoriteMovies(@PathVariable(name = "id") Long userId) {
+
+        List<MovieListItem> movieListItem = userService.userGetFavoriteMovies(userId);
+        return ResponseEntity.ok(movieListItem);
+    }
+
+    @GetMapping("/get/info")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<Boolean>> userGetMoviesInfo(@RequestBody CheckUserMoviesInfoData checkUserMoviesInfoData) {
+
+        List<Boolean> moviesInfo = userService.userGetMoviesInfo(checkUserMoviesInfoData);
+        return ResponseEntity.ok(moviesInfo);
     }
 }

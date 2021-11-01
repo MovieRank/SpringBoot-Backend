@@ -5,6 +5,7 @@ import com.example.MovieRank.DTO.Movie.MovieListItem;
 import com.example.MovieRank.Services.Movie.CollectionCreateClass.CollectionCreateClass;
 import com.example.MovieRank.Services.Movie.HttpRequestClass.HttpRequestClass;
 import com.example.MovieRank.Services.Movie.ImageDownloadClass.ImageDownloadClass;
+import com.example.MovieRank.Services.Movie.ObjectCreateClass.ObjectCreateClass;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -58,19 +59,7 @@ public class MovieService {
         JSONArray jsonArray = new JSONArray(jsonObject.getJSONArray("results"));
 
         List<MovieListItem> movieListData = new ArrayList<>();
-        for (int i = 0; i < jsonArray.length(); i++) {
-
-            JSONObject movie = jsonArray.getJSONObject(i);
-            byte[] posterPath = ImageDownloadClass.getImage(getMovieImageURL + movie.getString("poster_path"));
-            movieListData.add(MovieListItem.builder()
-                    .movieId(movie.getLong("id"))
-                    .title(movie.getString("title"))
-                    .releaseDate(Date.valueOf(movie.getString("release_date")))
-                    .posterImage(posterPath)
-                    .voteAverage(0.0)
-                    .voteCount(0L)
-                    .build());
-        }
+        for (int i = 0; i < jsonArray.length(); i++) movieListData.add(ObjectCreateClass.createMovieListItem(jsonArray.getJSONObject(i)));
 
         return movieListData;
     }
@@ -81,19 +70,7 @@ public class MovieService {
         JSONArray jsonArray = new JSONArray(jsonObject.getJSONArray("results"));
 
         List<MovieListItem> movieListData = new ArrayList<>();
-        for (int i = 0; i < jsonArray.length(); i++) {
-
-            JSONObject movie = jsonArray.getJSONObject(i);
-            byte[] posterPath = ImageDownloadClass.getImage(getMovieImageURL + movie.getString("poster_path"));
-            movieListData.add(MovieListItem.builder()
-                    .movieId(movie.getLong("id"))
-                    .title(movie.getString("title"))
-                    .releaseDate(Date.valueOf(movie.getString("release_date")))
-                    .posterImage(posterPath)
-                    .voteAverage(0.0)
-                    .voteCount(0L)
-                    .build());
-        }
+        for (int i = 0; i < jsonArray.length(); i++) movieListData.add(ObjectCreateClass.createMovieListItem(jsonArray.getJSONObject(i)));
 
         return movieListData;
     }
@@ -104,19 +81,7 @@ public class MovieService {
         JSONArray jsonArray = new JSONArray(jsonObject.getJSONArray("results"));
 
         List<MovieListItem> movieListData = new ArrayList<>();
-        for (int i = 0; i < jsonArray.length(); i++) {
-
-            JSONObject movie = jsonArray.getJSONObject(i);
-            byte[] posterPath = ImageDownloadClass.getImage(getMovieImageURL + movie.getString("poster_path"));
-            movieListData.add(MovieListItem.builder()
-                    .movieId(movie.getLong("id"))
-                    .title(movie.getString("title"))
-                    .releaseDate(Date.valueOf(movie.getString("release_date")))
-                    .posterImage(posterPath)
-                    .voteAverage(0.0)
-                    .voteCount(0L)
-                    .build());
-        }
+        for (int i = 0; i < jsonArray.length(); i++) movieListData.add(ObjectCreateClass.createMovieListItem(jsonArray.getJSONObject(i)));
 
         return movieListData;
     }
@@ -125,19 +90,9 @@ public class MovieService {
 
         List<MovieListItem> movieListData = new ArrayList<>();
         for (long i = 101+((page-1)*20); i < 121+((page-1)*20); i++) {
-
             JSONObject movie = new JSONObject(HttpRequestClass.sendRequest(getMovieFirstPartURL + i + getMovieSecondPartURL).body());
             if (!movie.has("poster_path") || movie.isNull("poster_path")) continue;
-
-            byte[] posterPath = ImageDownloadClass.getImage(getMovieImageURL + movie.getString("poster_path"));
-            movieListData.add(MovieListItem.builder()
-                    .movieId(movie.getLong("id"))
-                    .title(movie.getString("title"))
-                    .releaseDate(Date.valueOf(movie.getString("release_date")))
-                    .posterImage(posterPath)
-                    .voteAverage(0.0)
-                    .voteCount(0L)
-                    .build());
+            movieListData.add(ObjectCreateClass.createMovieListItem(movie));
         }
 
         return movieListData;
