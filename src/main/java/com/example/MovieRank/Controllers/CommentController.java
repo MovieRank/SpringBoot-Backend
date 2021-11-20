@@ -22,7 +22,7 @@ public class CommentController {
 
     public CommentController(CommentService commentService) { this.commentService = commentService; }
 
-    @PostMapping("add")
+    @PostMapping("/add")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<MessageResponse> addComment(@RequestBody AddCommentRequest addCommentRequest) {
 
@@ -30,7 +30,7 @@ public class CommentController {
         return ResponseEntity.ok(messageResponse);
     }
 
-    @PutMapping("edit")
+    @PutMapping("/edit")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<MessageResponse> editComment(@RequestBody EditCommentRequest editCommentRequest) {
 
@@ -38,7 +38,7 @@ public class CommentController {
         return ResponseEntity.ok(messageResponse);
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<MessageResponse> deleteComment(@PathVariable(name = "id") Long commentId) {
 
@@ -46,7 +46,7 @@ public class CommentController {
         return ResponseEntity.ok(messageResponse);
     }
 
-    @PutMapping("like")
+    @PutMapping("/like")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<MessageResponse> addLike(@RequestBody AddLikeRequest addLikeRequest) {
 
@@ -54,7 +54,7 @@ public class CommentController {
         return ResponseEntity.ok(messageResponse);
     }
 
-    @PutMapping("unlike")
+    @PutMapping("/unlike")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<MessageResponse> addUnlike(@RequestBody AddUnlikeRequest addUnlikeRequest) {
 
@@ -62,7 +62,7 @@ public class CommentController {
         return ResponseEntity.ok(messageResponse);
     }
 
-    @PostMapping("get/{id}")
+    @PostMapping("/get/{id}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<CommentListItem>> getComments(@PathVariable(name = "id") Long movieId) {
 
