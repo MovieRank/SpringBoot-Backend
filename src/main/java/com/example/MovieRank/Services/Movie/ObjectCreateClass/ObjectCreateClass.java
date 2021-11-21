@@ -13,16 +13,13 @@ public class ObjectCreateClass {
 
     static Logger logger = LoggerFactory.getLogger(CollectionCreateClass.class);
 
-    public static final String getMovieImageURL = "http://image.tmdb.org/t/p/original";
-
     public static MovieListItem createMovieListItem(JSONObject movie) {
 
-        byte[] posterPath = ImageDownloadClass.getImage(getMovieImageURL + movie.getString("poster_path"));
         return MovieListItem.builder()
                 .movieId(movie.getLong("id"))
                 .title(movie.getString("title"))
                 .releaseDate(Date.valueOf(movie.getString("release_date")))
-                .posterImage(posterPath)
+                .posterImage(movie.getString("poster_path"))
                 .voteAverage(0.0)
                 .voteCount(0L)
                 .build();
