@@ -20,7 +20,6 @@ public class CreditsService {
     public static final String getMovieCreditsSecondPartURL = "/credits?api_key=6728e1ab041b59d1f357590bff4384f5&language=pl-PL";
     public static final String getPersonFirstPartURL = "https://api.themoviedb.org/3/person/";
     public static final String getPersonSecondPartURL = "?api_key=6728e1ab041b59d1f357590bff4384f5&language=pl-PL";
-    public static final String getProfileImageURL = "http://image.tmdb.org/t/p/original";
 
     public List<CastListItem> getMovieCast(Long movieId) {
 
@@ -31,13 +30,10 @@ public class CreditsService {
         for (int i = 0; i < jsonArray.length(); i++) {
 
             JSONObject actor = jsonArray.getJSONObject(i);
-
-            byte[] profileImage = null;
-            if (!actor.isNull("profile_path")) profileImage = ImageDownloadClass.getImage(getProfileImageURL + actor.getString("profile_path"));
             castListItems.add(CastListItem.builder()
                     .actorId(actor.getLong("id"))
                     .name(actor.getString("name"))
-                    .profileImage(profileImage)
+                    .profileImage(actor.isNull("profile_path")? null : actor.getString("profile_path"))
                     .character(actor.getString("character"))
                     .build());
         }
@@ -54,12 +50,10 @@ public class CreditsService {
         for (int i = 0; i <jsonArray.length(); i++) {
 
             JSONObject person = jsonArray.getJSONObject(i);
-            byte[] profileImage = null;
-            if (!person.isNull("profile_path")) profileImage = ImageDownloadClass.getImage(getProfileImageURL + person.getString("profile_path"));
             crewListItems.add(CrewListItem.builder()
                     .personId(person.getLong("id"))
                     .name(person.getString("name"))
-                    .profileImage(profileImage)
+                    .profileImage(person.isNull("profile_path")? null : person.getString("profile_path"))
                     .department(person.getString("department"))
                     .build());
         }
@@ -71,8 +65,6 @@ public class CreditsService {
 
         JSONObject jsonObject = new JSONObject(HttpRequestClass.sendRequest(getPersonFirstPartURL + personId + getPersonSecondPartURL).body());
 
-        byte[] profileImage = ImageDownloadClass.getImage(getProfileImageURL + jsonObject.getString("profile_path"));
-
         return PersonData.builder()
                 .personId(jsonObject.getLong("id"))
                 .name(jsonObject.getString("name"))
@@ -81,7 +73,7 @@ public class CreditsService {
                 .birthDay(Date.valueOf(jsonObject.getString("birthday")))
                 .deathDay(jsonObject.isNull("deathday")? null : Date.valueOf(jsonObject.getString("deathday")))
                 .placeOfBirth(jsonObject.getString("place_of_birth"))
-                .profileImage(profileImage)
+                .profileImage(jsonObject.isNull("profile_path")? null : jsonObject.getString("profile_path"))
                 .build();
     }
 }

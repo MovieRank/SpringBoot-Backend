@@ -28,12 +28,8 @@ public class AuthenticationClass {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    public static UserTokenData getUserData(Authentication authentication, JwtUtils jwtUtils) {
+    public static String getUserData(Authentication authentication, JwtUtils jwtUtils) {
 
-        String token = jwtUtils.generateJwtToken(authentication);
-        return UserTokenData.builder()
-                .token(token)
-                .type("Bearer")
-                .build();
+        return jwtUtils.generateJwtToken(authentication);
     }
 }

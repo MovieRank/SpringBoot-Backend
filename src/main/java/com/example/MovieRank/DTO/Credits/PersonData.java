@@ -27,5 +27,5 @@ public class PersonData {
 
     public String placeOfBirth;
 
-    public byte[] profileImage;
+    public String profileImage;
 }
