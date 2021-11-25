@@ -58,7 +58,13 @@ public class UserService {
     public UserTokenData userLogin(LoginData loginData) {
 
         Authentication authentication = AuthenticationClass.authenticateUser(authenticationManager, loginData);
-        UserTokenData userTokenData = AuthenticationClass.getUserData(authentication, jwtUtils);
+        User user = userRepository.findUserByUsername(loginData.getUsername()).get();
+        UserTokenData userTokenData = UserTokenData.builder()
+                .userId(user.getUserId())
+                .username(user.getUsername())
+                .type("Bearer")
+                .token(AuthenticationClass.getUserData(authentication, jwtUtils))
+                .build();
 
         logger.info("User successfully logged in: " +  "\"" + loginData.getUsername() + "\"");
         return userTokenData;
