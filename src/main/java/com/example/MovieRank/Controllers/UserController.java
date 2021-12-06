@@ -4,6 +4,7 @@ import com.example.MovieRank.DTO.MessageResponse;
 import com.example.MovieRank.DTO.Movie.MovieListItem;
 import com.example.MovieRank.DTO.User.Request.*;
 import com.example.MovieRank.DTO.User.Response.UserImageData;
+import com.example.MovieRank.DTO.User.Response.UserInfo;
 import com.example.MovieRank.DTO.User.Response.UserTokenData;
 import com.example.MovieRank.Services.User.UserService;
 import org.springframework.http.ResponseEntity;
@@ -122,5 +123,13 @@ public class UserController {
 
         List<Boolean> moviesInfo = userService.userGetMoviesInfo(checkUserMoviesInfoData);
         return ResponseEntity.ok(moviesInfo);
+    }
+
+    @GetMapping("/info/{id}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<UserInfo> getUserInfo(@PathVariable("id") Long userId) {
+
+        UserInfo userInfo = userService.getUserInfo(userId);
+        return ResponseEntity.ok(userInfo);
     }
 }
