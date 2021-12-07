@@ -137,12 +137,11 @@ public class UserService {
         return new MessageResponse("Dane zostały zaktualizowane.");
     }
 
-    public MessageResponse userDelete(DeleteData deleteData) {
+    public MessageResponse userDelete(Long userId) {
 
-        AuthenticationClass.authenticateUser(authenticationManager, deleteData);
-        userRepository.delete(UserAnalysis.findUserByUserId(userRepository, deleteData.getUserId()));
+        userRepository.delete(UserAnalysis.findUserByUserId(userRepository, userId));
 
-        logger.info("User successfully deleted: " +  "\"" + deleteData.getUsername() + "\"");
+        logger.info("User successfully deleted");
         return new MessageResponse("Konto zostało usunięte.");
     }
 

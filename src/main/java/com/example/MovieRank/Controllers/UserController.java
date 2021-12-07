@@ -45,11 +45,11 @@ public class UserController {
         return ResponseEntity.ok(messageResponse);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<MessageResponse> userDelete(@RequestBody DeleteData deleteData) {
+    public ResponseEntity<MessageResponse> userDelete(@PathVariable(name = "id") Long userId) {
 
-        MessageResponse messageResponse = userService.userDelete(deleteData);
+        MessageResponse messageResponse = userService.userDelete(userId);
         return ResponseEntity.ok(messageResponse);
     }
 
