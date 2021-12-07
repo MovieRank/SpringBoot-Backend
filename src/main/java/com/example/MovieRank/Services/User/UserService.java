@@ -4,6 +4,7 @@ import com.example.MovieRank.DTO.MessageResponse;
 import com.example.MovieRank.DTO.Movie.MovieListItem;
 import com.example.MovieRank.DTO.User.Request.*;
 import com.example.MovieRank.DTO.User.Response.UserImageData;
+import com.example.MovieRank.DTO.User.Response.UserInfo;
 import com.example.MovieRank.DTO.User.Response.UserTokenData;
 import com.example.MovieRank.Entities.User;
 import com.example.MovieRank.Exceptions.IncorrectDataInput;
@@ -275,5 +276,16 @@ public class UserService {
         if ((user.getFavoriteMovies().containsKey(movieId))) { moviesInfo.add(true); } else { moviesInfo.add(false); }
 
         return moviesInfo;
+    }
+
+    public UserInfo getUserInfo(Long userId) {
+        User user = UserAnalysis.findUserByUserId(userRepository, userId);
+
+        return UserInfo.builder()
+                .username(user.getUsername())
+                .firstName(user.getFirstname() != null ? user.getFirstname() : "")
+                .lastName(user.getLastname() != null ? user.getLastname() : "")
+                .email(user.getEmail())
+                .build();
     }
 }
