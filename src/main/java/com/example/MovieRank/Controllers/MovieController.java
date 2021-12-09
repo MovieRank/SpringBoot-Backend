@@ -50,4 +50,11 @@ public class MovieController {
         List<MovieListItem> movieListData = movieService.getUpcomingMovies(page);
         return ResponseEntity.ok(movieListData);
     }
+
+    @GetMapping("/search/{query}")
+    public ResponseEntity<List<MovieListItem>> searchMovies(@PathVariable(name = "query") String query) {
+
+        List<MovieListItem> movieListData = movieService.searchMovies(query);
+        return ResponseEntity.ok(movieListData);
+    }
 }
